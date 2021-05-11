@@ -26,6 +26,7 @@ func main() {
 	_, err = r.Read()
 	runtime.Assert(err)
 	var opens, closes []float64
+	var upDays, downDays int
 	for {
 		data, err := r.Read()
 		if err != nil {
@@ -40,20 +41,28 @@ func main() {
 		runtime.Assert(err)
 		opens = append(opens, open)
 		closes = append(closes, close)
+		if close-open > 0 {
+			upDays++
+		} else if close-open < 0 {
+			downDays++
+		}
 	}
+	lastOpen := opens[len(opens)-1]
+	lastClose := closes[len(closes)-1]
 	sort.Float64s(opens)
 	sort.Float64s(closes)
-	show(opens, "open")
-	show(closes, "close")
+	show(opens, lastOpen, "open")
+	show(closes, lastClose, "close")
+	fmt.Printf("total_days: %d, up_days: %d, down_days: %d\n", len(opens), upDays, downDays)
 }
 
-func show(arr []float64, prefix string) {
+func show(arr []float64, last float64, prefix string) {
 	fmt.Printf(`%s:
-  avg=%.02f, mean=%.02f
+  avg=%.02f, mean=%.02f, last=%.02f
   min=%.02f, max=%.02f, stddev=%.02f
   P10=%.02f, P70=%.02f, P90=%.02f
 `,
-		prefix, avg(arr), arr[len(arr)/2],
+		prefix, avg(arr), arr[len(arr)/2], last,
 		arr[0], arr[len(arr)-1], stddev(arr),
 		percent(arr, 10), percent(arr, 70), percent(arr, 90))
 }

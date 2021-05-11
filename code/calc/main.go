@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -49,11 +50,11 @@ func main() {
 func show(arr []float64, prefix string) {
 	fmt.Printf(`%s:
   avg=%.02f, mean=%.02f
-  min=%.02f, max=%.02f
+  min=%.02f, max=%.02f, stddev=%.02f
   P10=%.02f, P70=%.02f, P90=%.02f
 `,
 		prefix, avg(arr), arr[len(arr)/2],
-		arr[0], arr[len(arr)-1],
+		arr[0], arr[len(arr)-1], stddev(arr),
 		percent(arr, 10), percent(arr, 70), percent(arr, 90))
 }
 
@@ -71,4 +72,16 @@ func avg(arr []float64) float64 {
 
 func percent(arr []float64, n int) float64 {
 	return arr[len(arr)*n/100]
+}
+
+func stddev(arr []float64) float64 {
+	a := avg(arr)
+	var ret float64
+	for _, n := range arr {
+		n -= a
+		n *= n
+		ret += n
+	}
+	ret /= float64(len(arr))
+	return math.Sqrt(ret)
 }

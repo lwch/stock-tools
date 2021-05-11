@@ -1,6 +1,13 @@
 # stock-tools
 
-股票分析工具
+股票分析选股工具
+
+## 下载股票数据
+
+    make
+    mkdir stock
+    cd stock
+    ../bin/list|xargs -L1 -I{} ../bin/download -code cn_{} -begin -365
 
 ## download
 

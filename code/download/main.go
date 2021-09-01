@@ -84,4 +84,6 @@ func main() {
 			turn,
 		}))
 	}
+	fmt.Printf("download: %s %s~%s\n", *code,
+		beginTime.Format("20060102"), endTime.Format("20060102"))
 }

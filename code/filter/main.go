@@ -100,6 +100,16 @@ func main() {
 		if !want {
 			continue
 		}
+		fi, err := os.Stat(file)
+		runtime.Assert(err)
+		for fi.Mode()&os.ModeSymlink == os.ModeSymlink {
+			file, err = os.Readlink(file)
+			runtime.Assert(err)
+			fi, err = os.Stat(file)
+			runtime.Assert(err)
+		}
+		file, err = filepath.Abs(file)
+		runtime.Assert(err)
 		os.Symlink(file, path.Join(*out, path.Base(file)))
 		fmt.Printf("%s added\n", path.Base(file))
 	}

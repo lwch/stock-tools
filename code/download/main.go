@@ -8,9 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strconv"
-	"strings"
 	"time"
+	"tools/code/utils"
 
 	"github.com/lwch/runtime"
 )
@@ -24,18 +23,8 @@ func main() {
 	begin := flag.String("begin", "-100", "开始时间，负数表示向前N天，或yyyymmdd")
 	flag.Parse()
 
-	var beginTime time.Time
+	beginTime := utils.BeginToTime(*begin)
 	endTime := time.Now()
-
-	if strings.HasPrefix(*begin, "-") {
-		n, err := strconv.ParseInt(*begin, 10, 64)
-		runtime.Assert(err)
-		beginTime = endTime.Add(time.Duration(n) * 24 * time.Hour)
-	} else {
-		var err error
-		beginTime, err = time.ParseInLocation("20060102", *begin, time.Local)
-		runtime.Assert(err)
-	}
 
 	args := make(url.Values)
 	args.Set("code", *code)

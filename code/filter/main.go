@@ -42,7 +42,7 @@ func main() {
 	case len(*f) > 0 && (*f)[0] == 'p':
 		p, err := strconv.ParseInt((*f)[1:], 10, 32)
 		runtime.Assert(err)
-		pfunc = utils.PercentFloat32(int(p))
+		pfunc = utils.Percent(int(p))
 	}
 	if len(*out) == 0 {
 		fmt.Println("缺少out参数")

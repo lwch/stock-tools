@@ -51,7 +51,7 @@ func Stdev(data []float64) float64 {
 	return math.Sqrt(ret)
 }
 
-func PercentFloat32(n int) PFunc {
+func Percent(n int) PFunc {
 	return func(data []float64) float64 {
 		tmp := make([]float64, len(data))
 		copy(tmp, data)

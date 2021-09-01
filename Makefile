@@ -1,10 +1,10 @@
-.PHONY: download calc list filter
+.PHONY: download info list filter
 
-all: download calc list filter
+all: download info list filter
 download:
 	go build -o bin/download code/download/*.go
-calc:
-	go build -o bin/calc code/calc/*.go
+info:
+	go build -o bin/info code/info/*.go
 list:
 	go build -o bin/list code/list/*.go
 filter:

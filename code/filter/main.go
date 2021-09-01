@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"math"
@@ -55,10 +56,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	files, err := filepath.Glob(path.Join(flag.Arg(0), "*.csv"))
+	from := flag.Arg(0)
+	var err error
+	from, err = filepath.Abs(from)
+	runtime.Assert(err)
+	files, err := filepath.Glob(path.Join(from, "*.csv"))
 	runtime.Assert(err)
 
 	runtime.Assert(os.MkdirAll(*out, 0755))
+	logManifest(path.Join(*out, "manifest.json"), from, *column, *f, *gt, *lt)
 	for _, file := range files {
 		data, err := utils.LoadCSV(file)
 		if err != nil {
@@ -113,4 +119,25 @@ func main() {
 		os.Symlink(file, path.Join(*out, path.Base(file)))
 		fmt.Printf("%s added\n", path.Base(file))
 	}
+}
+
+func logManifest(dir, from, column, f string, gt, lt float64) {
+	var data struct {
+		From   string  `json:"from"`
+		Column string  `json:"column"`
+		Func   string  `json:"func"`
+		GT     float64 `json:"gt"`
+		LT     float64 `json:"lt"`
+	}
+	data.From = from
+	data.Column = column
+	data.Func = f
+	data.GT = gt
+	data.LT = lt
+	file, err := os.Create(dir)
+	runtime.Assert(err)
+	defer file.Close()
+	enc := json.NewEncoder(file)
+	enc.SetIndent("", "    ")
+	runtime.Assert(enc.Encode(data))
 }

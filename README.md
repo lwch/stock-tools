@@ -39,3 +39,27 @@ min: 最小值
 max: 最大值
 stddev: 标准差
 P(N): 分位数
+
+## filter
+
+过滤工具，根据给定过滤条件筛选出符合条件的文件，参数如下：
+
+1. `begin`: 开始时间，负数为向前追溯N天，否则为yyyymmdd格式
+2. `column`: 筛选字段，支持open,close,low,high
+3. `func`: 聚合函数，支持max,min,sum,avg,stdev,p\<n\>，其中p\<n\>表示分位数
+4. `gt`: 筛选聚合后大于该值的数据
+5. `lt`: 筛选聚合后小于该值的数据
+6. `out`: 数据结果目录
+7. `其他`: 传入原始数据路径
+
+示例一、筛选最近30天收盘均价小于10元的股票
+
+    ./filter -begin -30 -column close -func avg -lt 10 -out <输出路径> <输入路径>
+
+示例二、筛选最近30天收盘价的标准差小于0.1的股票
+
+    ./filter -begin -30 -column close -func stdev -lt 0.1 -out <输出路径> <输入路径>
+
+示例三、筛选最近30天收盘价的中位数小于10元的股票
+
+    ./filter -begin -30 -column close -func p50 -lt 10 -out <输出路径> <输入路径>

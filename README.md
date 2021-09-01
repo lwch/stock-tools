@@ -7,8 +7,8 @@
     # 编译所有程序
     make
     # 准备操作目录
-    mkdir stock
-    cd stock
+    mkdir data
+    cd data
     # 获取所有个股最近1年数据
     ../bin/list|xargs -L1 -I{} ../bin/download -code cn_{} -begin -365
     # 筛选标准差小于0.2的个股（标准差越小说明股价波动越小，风险越小）

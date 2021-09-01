@@ -64,18 +64,22 @@ func main() {
 	defer f.Close()
 	w := csv.NewWriter(f)
 	defer w.Flush()
-	runtime.Assert(w.Write([]string{"date", "open", "close", "volume", "turn"}))
+	runtime.Assert(w.Write([]string{"date", "open", "close", "low", "high", "volume", "turn"}))
 	for _, date := range data.HQ {
 		t, err := time.ParseInLocation("2006-01-02", date[0], time.Local)
 		runtime.Assert(err)
 		open := date[1]   // 开盘
 		close := date[2]  // 收盘
+		low := date[5]    // 最低
+		high := date[6]   // 最高
 		volume := date[7] // 成交量
 		turn := date[8]   // 成交额
 		runtime.Assert(w.Write([]string{
 			t.Format("20060102"),
 			open,
 			close,
+			low,
+			high,
 			volume,
 			turn,
 		}))

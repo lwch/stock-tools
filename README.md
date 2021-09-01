@@ -15,7 +15,7 @@
     ../bin/filter -begin -365 -func stdev -lt 0.2 -out close_stdev_lt_0.2 stock
     # 筛选出均价小于10元的个股
     ../bin/filter -func avg -lt 10 -out close_avg_lt_10 close_stdev_lt_0.2
-    # 初选完毕，能够筛选到90只个股（截至到2021/9/1的数据）
+    # 初选完毕，能够筛选到90只个股（截止到2021/9/1的数据）
 
 ## download
 

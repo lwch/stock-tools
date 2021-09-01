@@ -65,6 +65,7 @@ func main() {
 
 	runtime.Assert(os.MkdirAll(*out, 0755))
 	logManifest(path.Join(*out, "manifest.json"), from, *column, *f, *gt, *lt)
+	var cnt int
 	for _, file := range files {
 		data, err := utils.LoadCSV(file)
 		if err != nil {
@@ -118,7 +119,9 @@ func main() {
 		runtime.Assert(err)
 		os.Symlink(file, path.Join(*out, path.Base(file)))
 		fmt.Printf("%s added\n", path.Base(file))
+		cnt++
 	}
+	fmt.Printf("数量：%d\n", cnt)
 }
 
 func logManifest(dir, from, column, f string, gt, lt float64) {

@@ -2,12 +2,20 @@
 
 股票分析选股工具
 
-## 下载股票数据
+## 选股示例
 
+    # 编译所有程序
     make
+    # 准备操作目录
     mkdir stock
     cd stock
+    # 获取所有个股最近1年数据
     ../bin/list|xargs -L1 -I{} ../bin/download -code cn_{} -begin -365
+    # 筛选标准差小于0.2的个股（标准差越小说明股价波动越小，风险越小）
+    ../bin/filter -begin -365 -func stdev -lt 0.2 -out close_stdev_lt_0.2 stock
+    # 筛选出均价小于10元的个股
+    ../bin/filter -func avg -lt 10 -out close_avg_lt_10 close_stdev_lt_0.2
+    # 初选完毕，能够筛选到90只个股（截至到2021/9/1的数据）
 
 ## download
 

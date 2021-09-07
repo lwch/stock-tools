@@ -54,7 +54,7 @@ func main() {
 	defer f.Close()
 	w := csv.NewWriter(f)
 	defer w.Flush()
-	runtime.Assert(w.Write([]string{"date", "open", "close", "low", "high", "volume", "turn", "delta"}))
+	runtime.Assert(w.Write([]string{"date", "open", "close", "low", "high", "volume", "turn", "delta", "deltap"}))
 	for _, date := range data.HQ {
 		t, err := time.ParseInLocation("2006-01-02", date[0], time.Local)
 		runtime.Assert(err)
@@ -67,6 +67,7 @@ func main() {
 		nOpen, _ := strconv.ParseFloat(open, 64)
 		nClose, _ := strconv.ParseFloat(close, 64)
 		delta := nClose - nOpen // 差量
+		deltaP := delta / nOpen // 差量百分比
 		runtime.Assert(w.Write([]string{
 			t.Format("20060102"),
 			open,
@@ -76,6 +77,7 @@ func main() {
 			volume,
 			turn,
 			fmt.Sprintf("%.02f", delta),
+			fmt.Sprintf("%.02f", deltaP),
 		}))
 	}
 	fmt.Printf("download: %s %s~%s\n", *code,

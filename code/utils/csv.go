@@ -18,6 +18,8 @@ type Row struct {
 	High   float64
 	Volumn float64
 	Turn   float64
+	Delta  float64
+	DeltaP float64
 }
 
 type Data struct {
@@ -40,6 +42,8 @@ func LoadCSV(dir string) (*Data, error) {
 	high := -1
 	volumn := -1
 	turn := -1
+	delta := -1
+	deltaP := -1
 	for i, name := range hdr {
 		switch name {
 		case "date":
@@ -56,6 +60,10 @@ func LoadCSV(dir string) (*Data, error) {
 			volumn = i
 		case "turn":
 			turn = i
+		case "delta":
+			delta = i
+		case "deltap":
+			deltaP = i
 		}
 	}
 	readFloat := func(row []string, idx int, dst *float64) error {
@@ -103,6 +111,14 @@ func LoadCSV(dir string) (*Data, error) {
 			return nil, err
 		}
 		err = readFloat(row, turn, &next.Turn)
+		if err != nil {
+			return nil, err
+		}
+		err = readFloat(row, delta, &next.Delta)
+		if err != nil {
+			return nil, err
+		}
+		err = readFloat(row, deltaP, &next.DeltaP)
 		if err != nil {
 			return nil, err
 		}
